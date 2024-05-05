@@ -7,7 +7,7 @@ project('calculator', ['c'],
 ss = import('sourceset')
 keyval = import('keyval')
 
-# TODO: 添加 Kconfig
+# TODO: 添加 Kconfig; 添加编译进度
 # config_algos_mak = configure_file(
 #         input: ['configs/algos/algos.mak'],
 #         output: 'algo_conf.h',
