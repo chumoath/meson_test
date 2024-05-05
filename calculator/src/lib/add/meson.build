@@ -1,0 +1,1 @@
+algo_ss.add(files('add.c'))

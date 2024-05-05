@@ -1,0 +1,1 @@
+cal_ss.add(files('calculator.c'))
