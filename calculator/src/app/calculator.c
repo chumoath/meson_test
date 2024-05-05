@@ -15,6 +15,7 @@ int main(int argc, const char *argv[])
     b = atoi(argv[3]);
     op = argv[2][0];
     
+    // TODO: 将op改为动态扩展的；让每个模块自己注册；用好constructor；多参考开源代码框架如何实现
     switch (op)
     {
     case '+':
