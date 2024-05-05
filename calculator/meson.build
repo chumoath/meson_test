@@ -15,7 +15,7 @@ config_data = {}
 
 algo_ss = algo_ss.apply(config_data, strict: false)
 
-libalgorithm = static_library('algorithm',
+libalgorithm = shared_library('algorithm',
                              sources: algo_ss.sources(),
                              dependencies: [algo_ss.dependencies()])
 
@@ -29,7 +29,8 @@ cal_ss = cal_ss.apply(config_data, strict: false)
 target_inc = [include_directories('inc')]
 target_inc += include_directories('src/lib/inc')
 
-deps = [ algorithm ]
+# deps = [ algorithm ]
+deps = [ libalgorithm ]
 deps += algo_ss.dependencies()
 
 exe = {
@@ -42,5 +43,6 @@ calculator = executable(exe['name'],
                sources: exe['sources'],
                install: true,
                include_directories: target_inc,
-               dependencies: deps
+        #        dependencies: deps
+               link_with: deps
                )
