@@ -5,6 +5,22 @@ project('calculator', ['c'],
 )
 
 ss = import('sourceset')
+keyval = import('keyval')
+
+# TODO: 添加 Kconfig
+# config_algos_mak = configure_file(
+#         input: ['configs/algos/algos.mak'],
+#         output: 'algo_conf.h',
+#         copy: true
+# )
+
+config_algos_data = configuration_data()
+config_algos = keyval.load('configs/algos/algos.mak')
+
+foreach k, v: config_algos
+        config_algos_data.set(k, 1)
+endforeach
+
 
 algo_ss = ss.source_set()
 cal_ss = ss.source_set()
@@ -13,7 +29,7 @@ subdir('src')
 
 config_data = {}
 
-algo_ss = algo_ss.apply(config_data, strict: false)
+algo_ss = algo_ss.apply(config_algos_data, strict: false)
 
 libalgorithm = shared_library('algorithm',
                              sources: algo_ss.sources(),

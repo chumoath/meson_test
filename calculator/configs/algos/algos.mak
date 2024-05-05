@@ -1,0 +1,2 @@
+CONFIG_ADD=y
+CONFIG_SUB=y
