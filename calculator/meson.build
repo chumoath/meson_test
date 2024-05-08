@@ -14,12 +14,37 @@ keyval = import('keyval')
 #         copy: true
 # )
 
-config_algos_data = configuration_data()
-config_algos = keyval.load('configs/algos/algos.mak')
+#config_algos_data = configuration_data()
+#config_algos = keyval.load('configs/algos/algos.mak')
 
-foreach k, v: config_algos
-        config_algos_data.set(k, 1)
+minikconf = find_program('scripts/minikconf.py')
+
+config_all_mak = 'config-all.mak'
+
+config_all_mak = configure_file(
+  input: ['configs/algos/algos.mak', 'Kconfig'],
+  output: config_all_mak,
+  depfile: config_all_mak + '.d',
+  capture: true,
+  command: [minikconf,
+	    '--defconfig',
+	    config_all_mak, 
+            '@DEPFILE@', 
+            '@INPUT@']
+)
+
+config_all_data = configuration_data()
+config_all = keyval.load(config_all_mak)
+
+
+#foreach k, v: config_algos
+#        config_algos_data.set(k, 1)
+#endforeach
+#
+foreach k, v: config_all
+  config_all_data.set(k, 1)
 endforeach
+
 
 
 algo_ss = ss.source_set()
@@ -27,9 +52,10 @@ cal_ss = ss.source_set()
 
 subdir('src')
 
-config_data = {}
+#config_data = {}
 
-algo_ss = algo_ss.apply(config_algos_data, strict: false)
+#algo_ss = algo_ss.apply(config_algos_data, strict: false)
+algo_ss = algo_ss.apply(config_all_data, strict: false)
 
 libalgorithm = shared_library('algorithm',
                              sources: algo_ss.sources(),
@@ -39,7 +65,8 @@ libalgorithm = shared_library('algorithm',
 algorithm = declare_dependency(link_whole: libalgorithm)
 
 # strict: false，在config没有出现的选项，默认为 false
-cal_ss = cal_ss.apply(config_data, strict: false)
+#cal_ss = cal_ss.apply(config_data, strict: false)
+cal_ss = cal_ss.apply(config_all_data, strict: false)
 
 
 target_inc = [include_directories('inc')]

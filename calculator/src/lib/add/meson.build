@@ -1,1 +1,1 @@
-algo_ss.add(when: 'CONFIG_SUB', if_true: files('add.c'))
+algo_ss.add(when: 'CONFIG_ADD', if_true: files('add.c'))
