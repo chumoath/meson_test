@@ -7,6 +7,14 @@ project('calculator', ['c'],
 ss = import('sourceset')
 keyval = import('keyval')
 
+target_inc = [include_directories('inc')]
+target_inc += include_directories('src/lib/algos/inc')
+target_inc += include_directories('/usr/include/glib-2.0')
+target_inc += include_directories('/usr/lib/x86_64-linux-gnu/glib-2.0/include')
+
+glib_dep = dependency('glib-2.0', version : '>=2.0')
+readline_dep = dependency('readline')
+
 # TODO: 添加 Kconfig; 添加编译进度
 # config_algos_mak = configure_file(
 #         input: ['configs/algos/algos.mak'],
@@ -59,7 +67,8 @@ algo_ss = algo_ss.apply(config_all_data, strict: false)
 
 libalgorithm = shared_library('algorithm',
                              sources: algo_ss.sources(),
-                             dependencies: [algo_ss.dependencies()])
+                             include_directories: target_inc,
+                             dependencies: [algo_ss.dependencies(), glib_dep])
 
 
 algorithm = declare_dependency(link_whole: libalgorithm)
@@ -67,10 +76,6 @@ algorithm = declare_dependency(link_whole: libalgorithm)
 # strict: false，在config没有出现的选项，默认为 false
 #cal_ss = cal_ss.apply(config_data, strict: false)
 cal_ss = cal_ss.apply(config_all_data, strict: false)
-
-
-target_inc = [include_directories('inc')]
-target_inc += include_directories('src/lib/inc')
 
 # deps = [ algorithm ]
 deps = [ libalgorithm ]
@@ -87,5 +92,6 @@ calculator = executable(exe['name'],
                install: true,
                include_directories: target_inc,
         #        dependencies: deps
+               dependencies: [ glib_dep, readline_dep ],
                link_with: deps
                )

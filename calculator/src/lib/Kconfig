@@ -1,7 +1,1 @@
-source add/Kconfig
-source sub/Kconfig
-
-config ALGO
-    select ADD
-    select SUB 
-
+source algos/src/Kconfig

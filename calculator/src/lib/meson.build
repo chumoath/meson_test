@@ -1,2 +1,1 @@
-subdir('add')
-subdir('sub')
+subdir('algos/src')
